@@ -161,7 +161,7 @@ st.markdown("---")
 # Auto Image Slideshow
 st.subheader("📸 Our Memories")
 
-photo_files = [
+photos = [
     ("adri_in_bday.jpg", "Adri’s Birthday Celebration with me 🎂💖"),
     ("adri_in_bgarden.jpg", "Beautiful day in the Garden with me 🌸"),
     ("adri_in_khejurpukur.jpg", "Goofy selfies at Khejurpukur with me 😝"),
@@ -172,49 +172,9 @@ photo_files = [
     ("adri_mom_first_meet.jpg", "The day Adri’s mom met me for the first time ❤️")
 ]
 
-encoded_images = []
-captions = []
 
-for img_path, caption in photo_files:
-    try:
-        with open(img_path, "rb") as img_file:
-            img_bytes = img_file.read()
-            img_base64 = b64encode(img_bytes).decode("utf-8")
-            encoded_images.append(f"data:image/jpeg;base64,{img_base64}")
-            captions.append(caption)
-    except FileNotFoundError:
-        st.error(f"Image not found: {img_path}")
-
-if encoded_images:
-
-    # Convert Python lists to JS arrays as strings with quotes
-    js_images = "[" + ",".join([f'"{img}"' for img in encoded_images]) + "]"
-    js_captions = "[" + ",".join([f'"{cap}"' for cap in captions]) + "]"
-
-    html_code = f"""
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <img id="slideshow" src={encoded_images[0]}
-             style="max-width: 400px; width: 80%; height: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);"/>
-        <p id="caption" style="font-size: 17px; font-weight: bold; margin-top: 8px; color: #444; text-align: center;">
-            {captions[0]}
-        </p>
-    </div>
-
-    <script>
-        const images = {js_images};
-        const captions = {js_captions};
-        let index = 0;
-        setInterval(() => {{
-            index = (index + 1) % images.length;
-            document.getElementById("slideshow").src = images[index];
-            document.getElementById("caption").textContent = captions[index];
-        }}, 3000);
-    </script>
-    """
-
-    components.html(html_code, height=600)
-
-
+index = st.slider("Choose a memory 💞", 0, len(photos)-1, 0)
+st.image(photos[index][0], caption=photos[index][1], use_column_width=True)
 # Map of Places
 
 
